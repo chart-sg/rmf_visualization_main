@@ -219,7 +219,7 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
     };
 
   auto make_empty_zone_marker =
-    [=](const std::string& level_name) -> MarkerArray
+    [=]() -> MarkerArray
     {
       MarkerArray marker_array;
       return marker_array;
@@ -245,15 +245,31 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
 
     if (name)
     {
+      const std::string& s = *name;
+      std::string display_name = s;
+
+      const bool is_zone = zone_vertex_set.count(s);
+
+      if (is_zone)
+      {
+        zone_wp_marker.points.push_back(make_point(loc, 0.0));
+
+        size_t first = s.find('_');
+        size_t second = s.find('_', first + 1);
+
+        display_name =
+          (first != std::string::npos && second != std::string::npos)
+            ? s.substr(first + 1, second - first - 1)
+            : s;
+      }
+      else
+      {
+        wp_marker.points.push_back(make_point(loc, 0.0));
+      }
+
       text_vec.push_back(
-        make_text_marker(i, loc, *name, map_name));
-    }
+        make_text_marker(i, loc, display_name, map_name));
 
-    const bool is_zone = name && zone_vertex_set.count(*name);
-
-    if (is_zone)
-    {
-      zone_wp_marker.points.push_back(make_point(loc, 0.0));
     }
     else
     {
@@ -267,7 +283,7 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
 
     if (zone_markers.find(zone.level) == zone_markers.end())
     {
-        zone_markers[zone.level] = make_empty_zone_marker(zone.level);
+        zone_markers[zone.level] = make_empty_zone_marker();
     }
 
     auto& zm = zone_markers[zone.level];
