@@ -67,7 +67,6 @@ private:
     // This map is purely for easy lookup when modifying lane markers
     LaneMarkers all_lane_markers;
 
-    //CHART
     // vector to store vertice name for zones
     std::unordered_set<std::string> zone_vertex_set;
 
