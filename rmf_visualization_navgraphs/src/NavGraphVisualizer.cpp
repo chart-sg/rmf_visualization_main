@@ -317,6 +317,27 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
     marker.pose.position.z = 0.2;
 
     zm.markers.push_back(marker);
+
+    // Add zone name text marker
+    Marker zone_name_marker;
+    zone_name_marker.header.stamp = now;
+    zone_name_marker.header.frame_id = "map";
+    zone_name_marker.ns = fleet_name + "/zone_names/" + zone.name;
+    zone_name_marker.id = i;
+    zone_name_marker.action = zone_name_marker.MODIFY;
+    zone_name_marker.type = zone_name_marker.TEXT_VIEW_FACING;
+    zone_name_marker.text = zone.name;
+    zone_name_marker.pose.position.x = zone.center_x;
+    zone_name_marker.pose.position.y = zone.center_y;
+    zone_name_marker.pose.position.z = 0.5;
+    zone_name_marker.pose.orientation.w = 1.0;
+    zone_name_marker.scale.z = text_size;
+    zone_name_marker.color.r = 0.0;
+    zone_name_marker.color.g = 0.0;
+    zone_name_marker.color.b = 0.0;
+    zone_name_marker.color.a = 1.0;
+
+    zm.markers.push_back(zone_name_marker);
   }
 
   // In case the NavGraph msg was received after LanesStates, we update the lane markers
