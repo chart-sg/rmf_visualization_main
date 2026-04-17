@@ -92,16 +92,19 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
 
   // Optional: pre-reserve if you roughly know total vertices
   std::size_t total_vertices = 0;
-  for (const auto& zone : navgraph.zones) {
-      total_vertices += zone.vertices.size();
+  for (const auto& zone : navgraph.zones)
+  {
+    total_vertices += zone.vertices.size();
   }
   zone_vertex_set.reserve(total_vertices);
 
   // Fill the set directly
-  for (const auto& zone : navgraph.zones) {
-      for (const auto& vertex : zone.vertices) {
-          zone_vertex_set.insert(vertex.name);
-      }
+  for (const auto& zone : navgraph.zones)
+  {
+    for (const auto& vertex : zone.vertices)
+    {
+      zone_vertex_set.insert(vertex.name);
+    }
   }
 
   for (std::size_t i = 0; i < navgraph.edges.size(); ++i)
@@ -137,7 +140,7 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
 
     // Don't add lanes from zones
     if (zone_vertex_set.count(*entry_wp.name()) > 0 ||
-        zone_vertex_set.count(*exit_wp.name()) > 0)
+      zone_vertex_set.count(*exit_wp.name()) > 0)
     {
       marker->scale.x = lane.properties().speed_limit().has_value() ?
         lane_width * 0.5 : lane_width * 0.75;
@@ -255,21 +258,23 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
         zone_wp_marker.points.push_back(make_point(loc, 0.0));
 
         size_t pos = s.find("#p");
-        
-        if (pos != std::string::npos) 
+
+        if (pos != std::string::npos)
         {
           size_t start = pos + 2; // skip "#p"
 
           // skip digits after p
-          while (start < s.size() && isdigit(s[start])) {
-              start++;
+          while (start < s.size() && isdigit(s[start]))
+          {
+            start++;
           }
 
           // expect '#'
-          if (start < s.size() && s[start] == '#') {
-              start++; // move past '#'
-              display_name = s.substr(start);
-          } 
+          if (start < s.size() && s[start] == '#')
+          {
+            start++; // move past '#'
+            display_name = s.substr(start);
+          }
         }
       }
       else
@@ -293,7 +298,7 @@ void NavGraphVisualizer::FleetNavGraph::initialize_markers(
 
     if (zone_markers.find(zone.level) == zone_markers.end())
     {
-        zone_markers[zone.level] = make_empty_zone_marker();
+      zone_markers[zone.level] = make_empty_zone_marker();
     }
 
     auto& zm = zone_markers[zone.level];
@@ -387,7 +392,7 @@ auto NavGraphVisualizer::FleetNavGraph::update_lane_states(
 
   auto update_marker =
     [&](const std::size_t id,
-      std::function<void(Marker::SharedPtr& marker)> updater)
+    std::function<void(Marker::SharedPtr& marker)> updater)
     {
       auto it = all_lane_markers.find(id);
       if (it == all_lane_markers.end())
@@ -501,7 +506,8 @@ void NavGraphVisualizer::FleetNavGraph::fill_with_markers(
       zone_wp_marker.action = zone_wp_marker.DELETEALL;
       marker_array.markers.push_back(std::move(zone_wp_marker));
 
-      if (zone_markers.find(map_name) != zone_markers.end()){
+      if (zone_markers.find(map_name) != zone_markers.end())
+      {
         auto zone_marker_clone = zone_markers.at(map_name);
         for (auto& zone_marker : zone_marker_clone.markers)
         {
@@ -514,9 +520,11 @@ void NavGraphVisualizer::FleetNavGraph::fill_with_markers(
     {
       marker_array.markers.push_back(waypoint_markers[map_name]);
       marker_array.markers.push_back(zone_waypoint_markers[map_name]);
-      if (zone_markers.find(map_name) != zone_markers.end()){
+      if (zone_markers.find(map_name) != zone_markers.end())
+      {
         auto zone_marker_clone = zone_markers.at(map_name);
-        for (auto& zone_marker : zone_marker_clone.markers){
+        for (auto& zone_marker : zone_marker_clone.markers)
+        {
           marker_array.markers.push_back(zone_marker);
         }
       }
